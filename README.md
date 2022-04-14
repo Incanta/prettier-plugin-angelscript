@@ -1,6 +1,6 @@
 # Prettier Plugin for Unreal AngelScript
 
-This is a WIP plugin to enable Prettier support for Hazelight's version of AngelScript for Unreal Engine.
+This is a ::warning:: **WORK IN PROGRESS** ::warning:: plugin to enable Prettier support for Hazelight's version of AngelScript for Unreal Engine.
 
 The `package.json` links to a `angelscript-parser@1.1.1`, but it actually is using our fork of the parser at https://github.com/IncantaGames/angelscript-parser, and it is linked to this repo using `yarn link`:
 
