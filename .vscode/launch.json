@@ -1,0 +1,23 @@
+{
+  "configurations": [
+    {
+      "name": "Run Test",
+      "request": "launch",
+      "runtimeArgs": [
+        "run-script",
+        "start"
+      ],
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node",
+      "preLaunchTask": "build",
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/../angelscript-parser/**",
+        "!**/node_modules/**"
+      ]
+    }
+  ]
+}
