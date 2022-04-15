@@ -1,6 +1,5 @@
 import { asCScriptNode, eTokenType } from "angelscript-parser";
 import { AstPath, doc, Doc, ParserOptions } from "prettier";
-import printClass from "./class";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const {
@@ -44,7 +43,7 @@ export function printOriginal(
 export default function (
   path: AstPath<asCScriptNode>,
   options: ParserOptions<asCScriptNode>,
-  printChild: (path: keyof asCScriptNode) => Doc
+  printChild: (path: keyof asCScriptNode | Array<keyof asCScriptNode>) => Doc
 ): Doc | null {
   const node = path.getValue();
 
@@ -53,40 +52,25 @@ export default function (
       return "";
     }
     case eTokenType.ttWhiteSpace: {
-      return "";
+      return "TODO: ttWhiteSpace";
     }
     case eTokenType.ttOnelineComment: {
-      return "";
+      return "TODO: ttOnelineComment";
     }
     case eTokenType.ttMultilineComment: {
-      return "";
+      return "TODO: ttOnelineComment";
     }
     case eTokenType.ttIdentifier: {
-      return "";
-    }
-    case eTokenType.ttIntConstant: {
-      return "";
-    }
-    case eTokenType.ttFloat32Constant: {
-      return "";
-    }
-    case eTokenType.ttFloat64Constant: {
-      return "";
-    }
-    case eTokenType.ttStringConstant: {
-      return "";
+      return printOriginal(node, options.originalText);
     }
     case eTokenType.ttMultilineStringConstant: {
-      return "";
+      return "TODO: ttMultilineStringConstant";
     }
     case eTokenType.ttHeredocStringConstant: {
-      return "";
+      return "TODO: ttHeredocStringConstant";
     }
     case eTokenType.ttNonTerminatedStringConstant: {
-      return "";
-    }
-    case eTokenType.ttBitsConstant: {
-      return "";
+      return "TODO: ttNonTerminatedStringConstant";
     }
     case eTokenType.ttPlus: {
       return "+";
@@ -331,9 +315,6 @@ export default function (
     case eTokenType.ttCase: {
       return "case";
     }
-    case eTokenType.ttDefault: {
-      return "default";
-    }
     case eTokenType.ttIn: {
       return "in";
     }
@@ -345,9 +326,6 @@ export default function (
     }
     case eTokenType.ttNull: {
       return "null";
-    }
-    case eTokenType.ttClass: {
-      return printClass(path, options, printChild);
     }
     case eTokenType.ttTypedef: {
       return "typedef";

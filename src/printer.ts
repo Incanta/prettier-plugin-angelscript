@@ -1,6 +1,8 @@
-import { asCScriptNode, eScriptNode } from "angelscript-parser";
+import { asCScriptNode, eScriptNode, eTokenType } from "angelscript-parser";
 import { AstPath, doc, Doc, ParserOptions, Printer } from "prettier";
-import printToken from "./print/token";
+import printToken, { printOriginal } from "./print/token";
+import printClass from "./print/class";
+import printUnrealDeclaratorObject from "./print/unreal-declarator-object";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const {
@@ -35,7 +37,7 @@ const {
 function print(
   path: AstPath<asCScriptNode>,
   options: ParserOptions<asCScriptNode>,
-  printChild: (path: keyof asCScriptNode) => Doc
+  printChild: (path: keyof asCScriptNode | Array<keyof asCScriptNode>) => Doc
 ): Doc {
   const node = path.getValue();
 
@@ -50,165 +52,193 @@ function print(
       return "";
     }
     case eScriptNode.snScript: {
-      if (node.firstChild !== null) {
-        // @ts-ignore
-        return printChild("firstChild");
+      return printChild("firstChild");
+    }
+    case eScriptNode.snFunction: {
+      break;
+    }
+    case eScriptNode.snConstant: {
+      return printOriginal(node, options.originalText);
+    }
+    case eScriptNode.snDataType: {
+      break;
+    }
+    case eScriptNode.snIdentifier: {
+      if (node.firstChild?.tokenType === eTokenType.ttIdentifier) {
+        return printOriginal(node.firstChild, options.originalText);
+      }
+
+      // not sure what to do here yet
+      break;
+    }
+    case eScriptNode.snParameterList: {
+      break;
+    }
+    case eScriptNode.snStatementBlock: {
+      break;
+    }
+    case eScriptNode.snDeclaration: {
+      break;
+    }
+    case eScriptNode.snExpressionStatement: {
+      break;
+    }
+    case eScriptNode.snIf: {
+      break;
+    }
+    case eScriptNode.snFor: {
+      break;
+    }
+    case eScriptNode.snWhile: {
+      break;
+    }
+    case eScriptNode.snReturn: {
+      break;
+    }
+    case eScriptNode.snExpression: {
+      break;
+    }
+    case eScriptNode.snExprTerm: {
+      break;
+    }
+    case eScriptNode.snFunctionCall: {
+      break;
+    }
+    case eScriptNode.snConstructCall: {
+      break;
+    }
+    case eScriptNode.snArgList: {
+      break;
+    }
+    case eScriptNode.snExprPreOp: {
+      break;
+    }
+    case eScriptNode.snExprPostOp: {
+      break;
+    }
+    case eScriptNode.snExprOperator: {
+      break;
+    }
+    case eScriptNode.snExprValue: {
+      break;
+    }
+    case eScriptNode.snBreak: {
+      break;
+    }
+    case eScriptNode.snContinue: {
+      break;
+    }
+    case eScriptNode.snDoWhile: {
+      break;
+    }
+    case eScriptNode.snAssignment: {
+      return [" ", "=", " ", printChild("firstChild")];
+    }
+    case eScriptNode.snCondition: {
+      break;
+    }
+    case eScriptNode.snSwitch: {
+      break;
+    }
+    case eScriptNode.snCase: {
+      break;
+    }
+    case eScriptNode.snImport: {
+      break;
+    }
+    case eScriptNode.snClass: {
+      return printClass(path, options, printChild);
+    }
+    case eScriptNode.snInitList: {
+      break;
+    }
+    case eScriptNode.snInterface: {
+      break;
+    }
+    case eScriptNode.snEnum: {
+      break;
+    }
+    case eScriptNode.snTypedef: {
+      break;
+    }
+    case eScriptNode.snCast: {
+      break;
+    }
+    case eScriptNode.snVariableAccess: {
+      break;
+    }
+    case eScriptNode.snFuncDef: {
+      break;
+    }
+    case eScriptNode.snVirtualProperty: {
+      break;
+    }
+    case eScriptNode.snNamespace: {
+      break;
+    }
+    case eScriptNode.snMixin: {
+      break;
+    }
+    case eScriptNode.snListPattern: {
+      break;
+    }
+    case eScriptNode.snNamedArgument: {
+      break;
+    }
+    case eScriptNode.snScope: {
+      break;
+    }
+    case eScriptNode.snUnrealDeclarator: {
+      switch (node.tokenType) {
+        case eTokenType.ttUProperty: {
+          return indent(group(["UPROPERTY", printChild("firstChild")]));
+        }
+        case eTokenType.ttUFunction: {
+          return group(["UFUNCTION", printChild("firstChild")]);
+        }
       }
       return "";
     }
-    case eScriptNode.snFunction: {
-      return "";
-    }
-    case eScriptNode.snConstant: {
-      return "";
-    }
-    case eScriptNode.snDataType: {
-      return "";
-    }
-    case eScriptNode.snIdentifier: {
-      return "";
-    }
-    case eScriptNode.snParameterList: {
-      return "";
-    }
-    case eScriptNode.snStatementBlock: {
-      return "";
-    }
-    case eScriptNode.snDeclaration: {
-      return "";
-    }
-    case eScriptNode.snExpressionStatement: {
-      return "";
-    }
-    case eScriptNode.snIf: {
-      return "";
-    }
-    case eScriptNode.snFor: {
-      return "";
-    }
-    case eScriptNode.snWhile: {
-      return "";
-    }
-    case eScriptNode.snReturn: {
-      return "";
-    }
-    case eScriptNode.snExpression: {
-      return "";
-    }
-    case eScriptNode.snExprTerm: {
-      return "";
-    }
-    case eScriptNode.snFunctionCall: {
-      return "";
-    }
-    case eScriptNode.snConstructCall: {
-      return "";
-    }
-    case eScriptNode.snArgList: {
-      return "";
-    }
-    case eScriptNode.snExprPreOp: {
-      return "";
-    }
-    case eScriptNode.snExprPostOp: {
-      return "";
-    }
-    case eScriptNode.snExprOperator: {
-      return "";
-    }
-    case eScriptNode.snExprValue: {
-      return "";
-    }
-    case eScriptNode.snBreak: {
-      return "";
-    }
-    case eScriptNode.snContinue: {
-      return "";
-    }
-    case eScriptNode.snDoWhile: {
-      return "";
-    }
-    case eScriptNode.snAssignment: {
-      return "";
-    }
-    case eScriptNode.snCondition: {
-      return "";
-    }
-    case eScriptNode.snSwitch: {
-      return "";
-    }
-    case eScriptNode.snCase: {
-      return "";
-    }
-    case eScriptNode.snImport: {
-      return "";
-    }
-    case eScriptNode.snClass: {
-      return "";
-    }
-    case eScriptNode.snInitList: {
-      return "";
-    }
-    case eScriptNode.snInterface: {
-      return "";
-    }
-    case eScriptNode.snEnum: {
-      return "";
-    }
-    case eScriptNode.snTypedef: {
-      return "";
-    }
-    case eScriptNode.snCast: {
-      return "";
-    }
-    case eScriptNode.snVariableAccess: {
-      return "";
-    }
-    case eScriptNode.snFuncDef: {
-      return "";
-    }
-    case eScriptNode.snVirtualProperty: {
-      return "";
-    }
-    case eScriptNode.snNamespace: {
-      return "";
-    }
-    case eScriptNode.snMixin: {
-      return "";
-    }
-    case eScriptNode.snListPattern: {
-      return "";
-    }
-    case eScriptNode.snNamedArgument: {
-      return "";
-    }
-    case eScriptNode.snScope: {
-      return "";
-    }
-    case eScriptNode.snUnrealDeclarator: {
-      return "";
-    }
     case eScriptNode.snUnrealDeclaratorObject: {
-      return "";
+      const objectGroup = Symbol("unrealDeclaratorObject");
+      return group(
+        [
+          "(",
+          softline,
+          printUnrealDeclaratorObject(path, options, printChild),
+          ifBreak(dedent([softline, ")"]), ")", { groupId: objectGroup }),
+        ],
+        { id: objectGroup }
+      );
     }
     case eScriptNode.snUnrealDefaultValue: {
-      return "";
+      // the firstChild of this node is a snExpressionStatement
+      return fill(["default", " ", printChild("firstChild")]);
     }
     case eScriptNode.snUnrealAccess: {
-      return "";
+      break;
     }
     case eScriptNode.snUnrealAccessValue: {
-      return "";
+      break;
     }
     case eScriptNode.snUnrealAccessValueModifier: {
-      return "";
+      break;
     }
     case eScriptNode.snUnrealAccessReference: {
+      break;
+    }
+    case eScriptNode.snEmptyLine: {
+      // since we add lines in between declarations and
+      // expressions in things like ./class.ts, we can just print
+      // an empty string here; the new line will get printed accordingly
       return "";
     }
   }
 
-  return "";
+  // this is a fall back to just print what was there
+  // we don't support whatever this case is yet, so don't be
+  // destructive
+  return printOriginal(node, options.originalText);
 }
 
 export const printer: Printer = {

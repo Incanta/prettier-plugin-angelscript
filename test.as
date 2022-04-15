@@ -1,5 +1,7 @@
 class AServerGameModeMain: AInherited
 {
+
+
   UPROPERTY(DefaultComponent, meta = (SomeKey = SomeValue, AnotherKey ="Someliteral"))
   USidecarInterfaceProd Sidecar;
 

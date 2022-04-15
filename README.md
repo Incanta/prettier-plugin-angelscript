@@ -14,7 +14,7 @@ The `package.json` links to a `angelscript-parser@1.1.1`, but it actually is usi
     1. `yarn`
     1. `yarn build`
 
-This plugin currently doesn't function at all, but the parser *should* be set up to parse the Unreal AngelScript properly (including `UPROPERTY`, `UFUNCTION`, `UCLASS`, `USTRUCT`, `default` variable values, `access` declarations and reference). Take this statement with a grain a salt though as there was very little testing.
+This plugin currently doesn't function at all, but the parser has the majority finished (updated as we figure things out putting it in the plugin; including `UPROPERTY`, `UFUNCTION`, `UCLASS`, `USTRUCT`, `default` variable values, `access` declarations and reference). Take this statement with a grain a salt though as there was very little testing.
 
 From here, we should be able to just implement crawling the AST from the parser in the various `print` functionality of the prettier plugin to tell prettier how to print everything.
 
